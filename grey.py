@@ -7,7 +7,7 @@ y = 0
 X = 0
 Y = 0
 i = 0
-count = 320*240
+count = 32*240
 
 while(True):
     ret, frame = cap.read()
@@ -27,9 +27,10 @@ while(True):
         x = x/count
         y = y/count
 	i = 0
-	cv2.imshow('frame',frame)
-	if cv2.waitKey(1) & 0xFF == ord('q'):
-	    break
+	print("%s %s", x, y)
+	#cv2.imshow('frame',frame)
+	#if cv2.waitKey(1) & 0xFF == ord('q'):
+	#    break
 
 # When everything done, release the capture
 cap.release()
