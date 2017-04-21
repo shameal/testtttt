@@ -7,7 +7,7 @@ y = 0
 X = 0
 Y = 0
 i = 0
-count = 32*240
+count = 320*240
 
 while(True):
     ret, frame = cap.read()
