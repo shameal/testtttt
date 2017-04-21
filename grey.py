@@ -21,13 +21,13 @@ while(True):
 	        g = frame.item(X,Y,0)
 		b = frame.item(X,Y,1)
 		r = frame.item(X,Y,2)     
-		if r > 150 and b < 100 and g < 100:
+		if r > 140 and b < 100 and g < 100:
 		    x = Y + x
 		    y = X + y 
         x = x/count
         y = y/count
 	i = 0
-	print("%s %s", x, y)
+	print(x, y)
 	#cv2.imshow('frame',frame)
 	#if cv2.waitKey(1) & 0xFF == ord('q'):
 	#    break
