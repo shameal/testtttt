@@ -1,6 +1,7 @@
 import numpy as np
 import cv2
-I
+#import serial
+#ser = serial.Serial('/dev/ttyACM0', 9600)
 
 cap = cv2.VideoCapture(0)
 x = 0
