@@ -17,7 +17,7 @@ while(True):
         i+=1
     else:
 	for X in range(100, 380):
-	    for Y in range(100, 540):
+	    for Y in range(150, 490):
 	        g = frame.item(X,Y,0)
 		b = frame.item(X,Y,1)
 		r = frame.item(X,Y,2)     
