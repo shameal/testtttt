@@ -11,8 +11,6 @@ count = 320*240
 
 while(True):
     ret, frame = cap.read()
-    frame.set(3,320)
-    frame.set(4,240)
     X = 0
     Y = 0
     if i < 3:
