@@ -1,7 +1,7 @@
 import numpy as np
 import cv2
-#import serial
-#ser = serial.Serial('/dev/ttyACM0', 9600)
+import serial
+ser = serial.Serial('/dev/ttyACM0', 9600)
 
 cap = cv2.VideoCapture(0)
 x = 0
@@ -12,6 +12,7 @@ i = 0
 count = 34*280
 
 while(True):
+    ser.readline()
     ret, frame = cap.read()
     X = 0
     Y = 0
@@ -29,7 +30,7 @@ while(True):
         x = x/count
         y = y/count
 	i = 0
-	print(x, y)
+	ser.write(x,y)
 	#cv2.imshow('frame',frame)
 	#if cv2.waitKey(1) & 0xFF == ord('q'):
 	#    break
