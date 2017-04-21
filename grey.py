@@ -7,7 +7,7 @@ y = 0
 X = 0
 Y = 0
 i = 0
-count = 32*240
+count = 64*480
 
 while(True):
     ret, frame = cap.read()
@@ -16,8 +16,8 @@ while(True):
     if i < 3:
         i+=1
     else:
-	for X in range(0, 240):
-	    for Y in range(0, 320):
+	for X in range(0, 480):
+	    for Y in range(0, 640):
 	        g = frame.item(X,Y,0)
 		b = frame.item(X,Y,1)
 		r = frame.item(X,Y,2)     
