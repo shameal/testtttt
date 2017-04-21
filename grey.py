@@ -1,5 +1,6 @@
 import numpy as np
 import cv2
+I
 
 cap = cv2.VideoCapture(0)
 x = 0
@@ -13,7 +14,7 @@ while(True):
     ret, frame = cap.read()
     X = 0
     Y = 0
-    if i < 3:
+    if i < 4:
         i+=1
     else:
 	for X in range(100, 380):
