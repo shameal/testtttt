@@ -30,7 +30,7 @@ while(True):
         x = x/count
         y = y/count
 	i = 0
-	ser.write(x,y)
+	ser.write(x)
 	#cv2.imshow('frame',frame)
 	#if cv2.waitKey(1) & 0xFF == ord('q'):
 	#    break
