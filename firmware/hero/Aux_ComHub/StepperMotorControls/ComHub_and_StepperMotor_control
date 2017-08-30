@@ -1,0 +1,105 @@
+// Code for the Com Hub/Steppermotor
+#include <Servo.h>
+
+/**** pc key definition ****/
+#define KEY_PRESSED_OFFSET_W            ((uint16_t)0x01<<0)
+#define KEY_PRESSED_OFFSET_S            ((uint16_t)0x01<<1)
+#define KEY_PRESSED_OFFSET_A            ((uint16_t)0x01<<2)
+#define KEY_PRESSED_OFFSET_D            ((uint16_t)0x01<<3)
+#define KEY_PRESSED_OFFSET_Q            ((uint16_t)0x01<<4)
+#define KEY_PRESSED_OFFSET_E            ((uint16_t)0x01<<5)
+#define KEY_PRESSED_OFFSET_SHIFT        ((uint16_t)0x01<<6)
+#define KEY_PRESSED_OFFSET_CTRL         ((uint16_t)0x01<<7)
+
+//Pin Definitions
+#define stp 22
+#define dir 24
+
+// Configuration defines
+#define AUX_TIMER_PERIOD
+
+// Communication Headers
+#define AUX_IN_HEADER (0x7E)
+  
+// com buffers
+char aux_out_buf[32];
+
+//data variables
+int16_t aux_data[16];
+int i;
+
+// timing variables
+unsigned long aux_timer_prev_time;
+unsigned long aux_timer_cur_time;
+
+
+void setup() {
+  Serial.begin(115200); // Beckbox (AUX)
+  Serial1.begin(115200); // Linear Actuator (AUX)
+  Serial2.begin(115200); // Collector (AUX)
+  Serial3.begin(115200); // Cannon (AUX)
+  pinMode(stp, OUTPUT);
+  pinMode(dir, OUTPUT);
+  digitalWrite(stp, LOW);
+  digitalWrite(dir, LOW);
+}
+
+void loop() {
+  // (1) receive data from aux
+  if (Serial.peek() != AUX_IN_HEADER) {
+    Serial.read();
+  } else {
+    Serial.readBytes((char*) aux_out_buf, 32);
+    // cleanup buffer
+    for (int i = 0; i < 32; i++) {
+      aux_out_buf[i] = (aux_out_buf[i] & 255);
+    }
+    // convert to int16 buffer
+    for (int i = 0; i < 16; i++) {
+      aux_data[i] = ((int16_t) aux_out_buf[i * 2] << 8) | (aux_out_buf[i * 2 + 1] & 255);
+    }
+    
+    // Transmit info to all the other arduinos
+    aux_timer_cur_time = millis();
+    if (aux_timer_cur_time - aux_timer_prev_time >= AUX_TIMER_PERIOD) {
+        aux_timer_prev_time = aux_timer_cur_time;
+
+        // assemble outgoing packet
+        for (int i = 0; i < 32; i++) {
+            aux_out_buf[i] = tpz_in_buf[i];
+        }
+        aux_out_buf[0] = AUX_OUT_HEADER;
+        Serial1.write((uint8_t*) aux_out_buf, 32);
+        Serial2.write((uint8_t*) aux_out_buf, 32);
+        Serial3.write((uint8_t*) aux_out_buf, 32);
+    }
+
+    if (aux_data[9] > 1354){ // INCORRECT: Find value for desired key
+      StepForwardDefault();
+    }
+    if(aux_data[9] < 874 && aux_data[9] >0) { // INCORRECT: Find value for desired key
+      ReverseStepDefault();
+    }
+  }
+}
+
+void StepForwardDefault(){
+ for (x = 1; x <6; x++) { 
+  digitalWrite(dir, LOW); //Pull direction pin low to move "forward
+  digitalWrite(stp,HIGH); //Trigger one step forward
+  delayMicroseconds(500);
+  digitalWrite(stp,LOW); //Pull step pin low so it can be triggered again
+  delayMicroseconds(500);
+ }
+}
+
+void ReverseStepDefault(){
+  for (x = 1; x <6; x++) {
+  digitalWrite(dir, HIGH); //Pull direction pin high to move in "reverse"
+  digitalWrite(stp,HIGH); //Trigger one step
+  delayMicroseconds(500);
+  digitalWrite(stp,LOW); //Pull step pin low so it can be triggered again
+  delayMicroseconds(500);
+  }
+}
+
